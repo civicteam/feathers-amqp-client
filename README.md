@@ -54,6 +54,16 @@ service, you can do something like this:
         queue: { name: 'my-task-queue' }
     });
 
+## Handling failure
+
+feathers-amqp-client automatically reconnects on unexpected errors or server-triggered
+disconnects. This means it can recover after the AMQP broker crashes. However,any messages sent
+between the broker restart and the re-established connection will be lost, unless
+the queue is set up to persist them.
+
+The client will wait 5 seconds after a disconnect before reconnecting. To change this, 
+set `reconnectDelay` in the config parameter to bindStream.
+
 ## Development and Testing
 
 To run the tests locally:
@@ -61,4 +71,7 @@ To run the tests locally:
     npm install
     npm test
     
-Note - for the integration tests you must have docker installed.
+Note - for the integration tests you must have docker installed. The tests assume the docker
+socket is available at `/var/run/docker.sock`
+ 
+To override this (e.g. on Windows) set the `DOCKER_SOCKET_PATH` environment variable.
