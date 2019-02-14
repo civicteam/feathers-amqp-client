@@ -39,6 +39,7 @@
     "eslint-plugin-react": "^7.12.4",
     "feathers-memory": "^3.0.2",
     "mocha": "^5.2.0",
+    "node-docker-api": "^1.1.22",
     "nyc": "^13.2.0",
     "prettier": "^1.16.4"
   }

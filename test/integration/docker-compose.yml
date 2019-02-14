@@ -1,11 +1,12 @@
 version: '3.2'
 services:
-  rabbitmq:
+  rabbitmq-feathers-amqp-client:
     image: rabbitmq:3
-    container_name: rabbitmq
-    hostname: my-rabbit
+    hostname: rabbitmq-feathers-amqp-client
     environment:
+      # disable heartbeat to prevent open connections and promises
+      # from hanging around after tests are complete
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbit heartbeat 0"
     ports:
-      - 5672:5672
-      - 15672:15672
+      # use uncommon ports in case a 'real' rabbitmq instance is running locally on 5672
+      - 55672:5672
