@@ -30,6 +30,6 @@ rules:
   - printWidth: 120
     singleQuote: true
 overrides:
-  files: "*.test.js"
-  rules:
-    no-unused-expressions: "off"
+  - files: "*.test.js"
+    rules:
+      no-unused-expressions: "off"

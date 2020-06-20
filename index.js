@@ -5,7 +5,7 @@ let connection;
 const disconnectTasks = [];
 let clientClosed = false;
 
-const sleepSeconds = seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));
+const sleepSeconds = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
 async function bindStream(fn, config) {
   const { maxRetries = Infinity, server = 'amqp://localhost', reconnectDelay = 5 } = config;
@@ -27,12 +27,12 @@ async function bindStream(fn, config) {
     channel = await connection.createChannel();
 
     // If some error causes the channel or the connection to go down, attempt to reconnect
-    channel.on('error', e => {
+    channel.on('error', (e) => {
       console.error('Feathers-AMQP-Client: Channel closed with error', { reason: e });
       attemptReconnect();
     });
 
-    connection.on('error', e => {
+    connection.on('error', (e) => {
       console.error('Feathers-AMQP-Client: Connection closed with error', { reason: e });
       attemptReconnect();
     });
@@ -47,7 +47,7 @@ async function bindStream(fn, config) {
     });
 
     channel.assertExchange(config.exchange.name, config.exchange.type || 'fanout', {
-      durable: config.durable || false
+      durable: config.durable || false,
     });
 
     const queue = await channel.assertQueue(config.queue.name, { exclusive: config.queue.exclusive || false });
@@ -59,7 +59,7 @@ async function bindStream(fn, config) {
     disconnectTasks.push(close);
 
     console.log('Feathers-AMQP-Client: Waiting for messages in %s.', config.queue.name);
-    return channel.consume(queue.queue, message => consume(message), { noAck: true });
+    return channel.consume(queue.queue, (message) => consume(message), { noAck: true });
   }
 
   async function close() {
@@ -90,7 +90,7 @@ async function bindStream(fn, config) {
       );
       sleepSeconds(reconnectDelay)
         .then(() => initialize(reconnectRetries - 1))
-        .catch(error => {
+        .catch((error) => {
           // reconnection failed - try again (decrementing retries)
           console.error('Feathers-AMQP-Client: Reconnection failed', { reason: error });
           return attemptReconnect(reconnectRetries - 1);
@@ -104,10 +104,10 @@ async function bindStream(fn, config) {
 }
 
 function disconnect() {
-  return Promise.all(disconnectTasks.map(fn => fn()));
+  return Promise.all(disconnectTasks.map((fn) => fn()));
 }
 
 module.exports = {
   bindStream,
-  disconnect
+  disconnect,
 };

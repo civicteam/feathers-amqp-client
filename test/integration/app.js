@@ -11,7 +11,7 @@ function lazyApp() {
 
   let serviceReady;
 
-  app.configure(async function() {
+  app.configure(async function () {
     app.use('/receiver', createService({}));
 
     const service = app.service('receiver');
@@ -19,7 +19,7 @@ function lazyApp() {
     serviceReady = bindStream(service.create.bind(service), {
       server: `amqp://localhost:${AMQP_PORT}`,
       exchange: { name: 'dummy-server' },
-      queue: { name: 'my-task-queue' }
+      queue: { name: 'my-task-queue' },
     });
 
     return serviceReady;
@@ -28,7 +28,7 @@ function lazyApp() {
   return {
     app,
     serviceReady,
-    disconnect
+    disconnect,
   };
 }
 
