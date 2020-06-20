@@ -12,10 +12,12 @@ async function bindStream(fn, config) {
   let channel;
 
   function consume(message) {
-    console.log(message);
     const content = JSON.parse(message.content);
 
-    fn(content.data);
+    // for backwards-compatibility. sometimes the message content is double-strinigified
+    const payload = content.data || JSON.parse(content).data
+
+    fn(payload);
   }
 
   async function initialize() {
