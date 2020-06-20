@@ -12,6 +12,7 @@ async function bindStream(fn, config) {
   let channel;
 
   function consume(message) {
+    console.log(message);
     const content = JSON.parse(message.content);
 
     fn(content.data);
