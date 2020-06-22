@@ -30,10 +30,10 @@ async function connectToBroker() {
 
 async function getBrokerContainer() {
   const list = await docker.container.list();
-  return list.filter(container => container.data.Names.includes(`/${CONTAINER_NAME}`))[0];
+  return list.filter((container) => container.data.Names.includes(`/${CONTAINER_NAME}`))[0];
 }
 
-describe('A feathers app', function() {
+describe('A feathers app', function () {
   this.timeout(120000);
 
   before('Start the broker', async () => {
