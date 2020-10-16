@@ -8,14 +8,14 @@ let clientClosed = false;
 const sleepSeconds = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
 async function bindStream(fn, config) {
-  const { maxRetries = Infinity, server = 'amqp://localhost', reconnectDelay = 5 } = config;
+  const { maxRetries = Infinity, server = config.server.name, reconnectDelay = 5 } = config;
   let channel;
 
   function consume(message) {
     const content = JSON.parse(message.content);
 
     // for backwards-compatibility. sometimes the message content is double-strinigified
-    const payload = content.data || JSON.parse(content).data
+    const payload = content.data || JSON.parse(content).data;
 
     fn(payload);
   }
@@ -23,7 +23,8 @@ async function bindStream(fn, config) {
   async function initialize() {
     // reuse an existing connection if present
     if (!connection) {
-      connection = await amqp.connect(server);
+      console.log('server name from feathers-amqp-client initialize is ', server);
+      connection = await amqp.connect(server.name).catch((error) => console.log('amqp.connect error ', error));
     }
 
     channel = await connection.createChannel();
@@ -87,7 +88,7 @@ async function bindStream(fn, config) {
     // unless the retries are down to zero
     if (reconnectRetries > 0) {
       console.error(
-        `Feathers-AMQP-Client: Attempting to reconnect. 
+        `Feathers-AMQP-Client: Attempting to reconnect.
         Retries: ${reconnectRetries}, reconnect delay: ${reconnectDelay}s`
       );
       sleepSeconds(reconnectDelay)
