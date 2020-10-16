@@ -24,6 +24,7 @@ receiver.service.js
         const service = app.service('posts');
     
         bindStream(service.create.bind(service), {
+          server: {name: 'amqp://user:pass@host:port'},
           exchange: { name: 'my-exchange'},
           queue: { name: 'my-task-queue' }
         });
